@@ -1,26 +1,9 @@
-export function getPlayerName (playerName) {
-  return async (dispatch) => {
-    try {
-      dispatch ({
-        action: 'GET_PLAYER_NAME',
-        payload: playerName
-      })
-
-      console.log(playerName)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
-
 export function getBoard (difficulty) {
   return async (dispatch) => {
     try {
       const response = await fetch(`https://sugoku.herokuapp.com/board?difficulty=${difficulty}`)
 
       const data = await response.json()
-    
-      // console.log(data.board , 'from action')
     
       dispatch ({
         type: 'GET_BOARD',

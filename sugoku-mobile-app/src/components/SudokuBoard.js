@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, View, StyleSheet, TextInput, Text, Button } from 'react-native'
+import { Dimensions, View, StyleSheet, TextInput, Text, Button, ImageBackground } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { getBoard } from '../store/actions/boardAction'
 import { validateBoard } from '../store/actions/boardAction'
@@ -7,7 +7,7 @@ import { validateBoard } from '../store/actions/boardAction'
 const { width } = Dimensions.get('screen')
 
 function SudokuBoard (props) {
-  const { board, status } = useSelector((state) => state)
+  const { board, status, isLoading } = useSelector((state) => state)
   const [currentBoard, setCurrentBoard] = useState([])
   const player = props.route.params.inputName
   const dispatch = useDispatch()
@@ -19,12 +19,13 @@ function SudokuBoard (props) {
 
   useEffect(() => {
     setCurrentBoard(board)
-  },[board])
+  },[board, status])
 
   function handleDifficulty (difficulty) {
     dispatch(getBoard(difficulty))
   }
 
+  
   function handleInput (value, idxCol, idxRow) {
     setCurrentBoard(
       currentBoard.map((row, i) => {
@@ -36,11 +37,19 @@ function SudokuBoard (props) {
               return cell
             }              
           })
+          )
+        })
         )
-      })
-    )
-    console.log(currentBoard, 'from button')
-  }
+        console.log(currentBoard, 'from button')
+      }
+      
+      if (isLoading) {
+        return (
+          <View style={ styles.row }>
+            <Text>Loading...</Text>
+          </View>
+        )
+      }
 
   function handleValidate () {
     dispatch(validateBoard(currentBoard))
@@ -51,13 +60,13 @@ function SudokuBoard (props) {
   return (
     <View>
       <View style={ styles.row }>
-        <Text style= { styles.playerName }>Halo, { player }</Text>
+        <Text style= { styles.playerName }>Welcome, { player }</Text>
       </View>
 
       <View style={ styles.row }>
-        <Button title="Easy"  onPress={() => handleDifficulty('easy')}/>
-        <Button title="Medium"  onPress={() => handleDifficulty('medium')}/>
-        <Button title="Hard"  onPress={() => handleDifficulty('hard')}/>
+        <Button title="Easy"  color="#ff2b2b" onPress={() => handleDifficulty('easy')}/>
+        <Button title="Medium"  color="#ff2b2b" onPress={() => handleDifficulty('medium')}/>
+        <Button title="Hard"  color="#ff2b2b" onPress={() => handleDifficulty('hard')}/>
       </View>
 
       <View style={ styles.row }>
@@ -98,7 +107,7 @@ function SudokuBoard (props) {
       </View>
 
       <View style={ styles.row}>
-        <Button title="Solve"  onPress={() => handleValidate()}/>
+        <Button title="Solve"  color="#ff2b2b" onPress={() => handleValidate()}/>
       </View>
     </View>
   )
@@ -117,7 +126,9 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 0.5,
     backgroundColor: '#ff2b2b',
-    color: 'white'
+    color: 'white',
+    borderWidth: 0,
+    borderRadius: 10,
   },
   unfilled: {
     width: (width - 30) / 9,
@@ -125,10 +136,18 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 0.5,
     backgroundColor: '#bfbfbf',
-    color: 'white'
+    color: 'white',
+    borderWidth: 0,
+    borderRadius: 10,
   },
   playerName: {
-    fontSize: 30
+    color: 'white',
+    fontSize: 30,
+    backgroundColor: 'red',
+    borderWidth: 0,
+    borderRadius: 10,
+    padding: 20,
+    marginTop: 30
   }
 });
 

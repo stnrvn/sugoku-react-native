@@ -1,21 +1,11 @@
 const initialState = {
+  isLoading: true,
   board: [],
-  status: '',
-  playerName: ''
+  status: ''
 }
 
 export function boardReducer (state = initialState, action) {
   switch (action.type) {
-    case 'GET_PLAYER_NAME':
-      return {
-        ...start,
-        playerName: action.payload
-      }
-    case 'START_BOARD':
-      return {
-        ...state,
-        isLoading: true
-      }
     case 'GET_BOARD':
       return {
         ...state,
@@ -25,7 +15,7 @@ export function boardReducer (state = initialState, action) {
     case 'START_SOLVE':
       return {
         ...state,
-        isLoading
+        isLoading: false
       }
     case 'UPDATE_STATUS':
       return {

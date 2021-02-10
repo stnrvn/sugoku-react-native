@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
     Dimensions,
     View,
     StyleSheet,
-    TextInput,
     Text,
     Button } from 'react-native'
+import { useSelector } from 'react-redux'
+
 
 const { width } = Dimensions.get('screen')
 
 
 function FinishScreen (props) {
- const status = props.route.params.status.toString()
+  const { status } = useSelector((state) => state)
+
   return(
     <View style={ styles.container }>
       {
